@@ -43,21 +43,27 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT;
+//const PORT = process.env.PORT;
 
-const server = app.listen(
-  PORT,
-  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
-);
+// const server = app.listen(PORT, () =>
+//   console.log(`Server running on PORT ${PORT}...`.yellow.bold)
+// );
 
-const io = require("socket.io")(server, {
-  pingTimeout: 60000,
-  cors: {
-    origin: "http://localhost:3000",
-    // credentials: true,
-  },
+// const io = require("socket.io")(server, {
+//   pingTimeout: 60000,
+//   cors: {
+//     origin: "http://localhost:2552",
+//     // credentials: true,
+//   },
+// });
+const http = require("http").Server(app);
+const io = require("Socket.io")(http);
+
+const PORT = 2547;
+const server = http.listen(2547, () => {
+  const port = server.address().port;
+  console.log(`running ${port}`);
 });
-
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
   socket.on("setup", (userData) => {
